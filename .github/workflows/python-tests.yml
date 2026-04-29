@@ -7,6 +7,33 @@ on:
         description: ALLURE_JOB_RUN_ID service parameter. Leave blank.
       ALLURE_USERNAME:
         description: ALLURE_USERNAME service parameter. Leave blank.
+      LOAD_TEST_COUNT:
+        description: Number of synthetic test results to generate.
+        default: "2000"
+      LOAD_TEST_CATALOG_SIZE:
+        description: Synthetic automated test catalog size.
+        default: "35000"
+      LOAD_TEST_ID_OFFSET:
+        description: Offset inside the synthetic test catalog for repeated runs.
+        default: "0"
+      LOAD_ATTACHMENTS_MIN:
+        description: Minimum attachments per result.
+        default: "50"
+      LOAD_ATTACHMENTS_MAX:
+        description: Maximum attachments per result.
+        default: "100"
+      LOAD_IMAGE_ATTACHMENT_PERCENT:
+        description: Percent of attachments generated as image-like files.
+        default: "70"
+      LOAD_IMAGE_ATTACHMENT_SIZE_BYTES:
+        description: Synthetic image attachment size in bytes.
+        default: "262144"
+      LOAD_TEXT_ATTACHMENT_SIZE_BYTES:
+        description: Synthetic text attachment size in bytes.
+        default: "4096"
+      LOAD_FAILED_RESULTS_PERCENT:
+        description: Percent of results that should fail. Use 0 to keep the workflow green.
+        default: "0"
 
 env:
   ALLURE_TOKEN: ${{ secrets.ALLURE_TOKEN }}
@@ -15,6 +42,15 @@ env:
   ALLURE_PROJECT_ID: 1
   ALLURE_RESULTS: allure-results
   ALLURE_LAUNCH_TAGS: Tag 1
+  LOAD_TEST_COUNT: ${{ github.event.inputs.LOAD_TEST_COUNT || '2000' }}
+  LOAD_TEST_CATALOG_SIZE: ${{ github.event.inputs.LOAD_TEST_CATALOG_SIZE || '35000' }}
+  LOAD_TEST_ID_OFFSET: ${{ github.event.inputs.LOAD_TEST_ID_OFFSET || '0' }}
+  LOAD_ATTACHMENTS_MIN: ${{ github.event.inputs.LOAD_ATTACHMENTS_MIN || '50' }}
+  LOAD_ATTACHMENTS_MAX: ${{ github.event.inputs.LOAD_ATTACHMENTS_MAX || '100' }}
+  LOAD_IMAGE_ATTACHMENT_PERCENT: ${{ github.event.inputs.LOAD_IMAGE_ATTACHMENT_PERCENT || '70' }}
+  LOAD_IMAGE_ATTACHMENT_SIZE_BYTES: ${{ github.event.inputs.LOAD_IMAGE_ATTACHMENT_SIZE_BYTES || '262144' }}
+  LOAD_TEXT_ATTACHMENT_SIZE_BYTES: ${{ github.event.inputs.LOAD_TEXT_ATTACHMENT_SIZE_BYTES || '4096' }}
+  LOAD_FAILED_RESULTS_PERCENT: ${{ github.event.inputs.LOAD_FAILED_RESULTS_PERCENT || '0' }}
   
 jobs:
   test:
