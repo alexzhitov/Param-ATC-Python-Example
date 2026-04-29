@@ -11,7 +11,7 @@ from pathlib import Path
 RESULTS_DIR = "allure-results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-RESOURCES = Path(__file__).parents[1] / "resources"
+RESOURCES = Path(__file__).parent / "resources"
 
 ATTACHMENTS_PER_TEST = int(os.getenv("LOAD_ATTACHMENTS_PER_TEST", "75"))
 TEST_COUNT = int(os.getenv("LOAD_TEST_COUNT", "500"))
