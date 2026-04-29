@@ -25,7 +25,7 @@ def test_customer_like_result(case_number):
     for attachment_number in range(ATTACHMENTS_PER_TEST):
         if attachment_number % 2 == 0:
             allure.attach.file(
-                RESOURCES / "small-image.jpg",
+                RESOURCES / "image.png",
                 name=f"screenshot-{attachment_number:03d}",
                 attachment_type=attachment_type.JPG,
             )
