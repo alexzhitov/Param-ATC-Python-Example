@@ -1,57 +1,42 @@
 import json
 import os
 
-
 import allure
 from datetime import datetime
 import pytest
 from allure import attachment_type
 from allure_commons.types import Severity
+from pathlib import Path
+
 RESULTS_DIR = "allure-results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-#@allure.id("484711")
+RESOURCES = Path(__file__).parents[1] / "resources"
 
-@pytest.fixture(scope="module")
-def setup_environment():
-    print("Setting up the test environment.")
-    yield
-    print("Tearing down the test environment.")
+ATTACHMENTS_PER_TEST = int(os.getenv("LOAD_ATTACHMENTS_PER_TEST", "75"))
+TEST_COUNT = int(os.getenv("LOAD_TEST_COUNT", "500"))
 
-@pytest.mark.parametrize("test_input, expected_output", [
-    ("input1", "output1"),
-    ("input2", "output2"),
-    ("input3", "output"),
-])
-@allure.label("jira", "BPDND-1")
-def test_generate_result_files(setup_environment, test_input, expected_output):
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+@pytest.mark.parametrize("case_number", range(TEST_COUNT))
+def test_customer_like_result(case_number):
+    allure.dynamic.feature("Customer load test")
+    allure.dynamic.story("500 results with 75 attachments")
+    allure.dynamic.title(f"Customer synthetic test #{case_number:04d}")
 
-    # Генерация JSON результата
-    json_result = {
-        "test_input": test_input,
-        "expected_output": expected_output,
-        "status": "passed",
-        "timestamp": timestamp
-    }
+    for attachment_number in range(ATTACHMENTS_PER_TEST):
+        if attachment_number % 2 == 0:
+            allure.attach.file(
+                RESOURCES / "small-image.jpg",
+                name=f"screenshot-{attachment_number:03d}",
+                attachment_type=attachment_type.JPG,
+            )
+        else:
+            allure.attach.file(
+                RESOURCES / "chekhov.txt",
+                name=f"log-{attachment_number:03d}",
+                attachment_type=attachment_type.TEXT,
+            )
 
-    json_file_path = os.path.join(RESULTS_DIR, f"result_{test_input}.json")
-    with open(json_file_path, "w") as json_file:
-        json.dump(json_result, json_file, indent=4)
-
-    # Генерация текстового результата
-    text_file_path = os.path.join(RESULTS_DIR, f"result_{test_input}.txt")
-    with open(text_file_path, "w") as text_file:
-        text_file.write(f"Test Input: {test_input}\n")
-        text_file.write(f"Expected Output: {expected_output}\n")
-        text_file.write(f"Status: passed\n")
-        text_file.write(f"Timestamp: {timestamp}\n")
-
-    # Проверка, что файлы созданы
-    assert os.path.exists(json_file_path)
-    assert os.path.exists(text_file_path)
-
-
+    assert True
 
 
 
